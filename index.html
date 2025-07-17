@@ -170,6 +170,63 @@
     .image-item:hover .room-image {
       transform: scale(1.02);
     }
+    .comparison-item {
+      background: #f4f6fa;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .comparison-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(10,34,80,0.12);
+    }
+    .comparison-images {
+      display: flex;
+      width: 100%;
+      gap: 8px;
+    }
+    .comparison-images.vertical {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .comparison-image {
+      flex: 1;
+      position: relative;
+    }
+    .comparison-image .room-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .comparison-images.vertical .comparison-image .room-image {
+      height: 150px;
+    }
+    .comparison-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10,34,80,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .comparison-item:hover .comparison-overlay {
+      opacity: 1;
+    }
+    .comparison-overlay span {
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-align: center;
+    }
     .staff-workroom-grid {
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, auto);
@@ -320,16 +377,45 @@
       justify-content: center;
       position: relative;
     }
-    .modal-img {
-      max-width: 100vw;
-      max-height: 100vh;
-      width: 100vw;
-      height: 100vh;
-      border-radius: 0;
-      margin: 0;
-      box-shadow: none;
-      background: transparent;
+    .modal-comparison {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-comparison-images {
+      display: flex;
+      gap: 20px;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: 100%;
+      height: 100%;
+    }
+    .modal-comparison-images.vertical {
+      flex-direction: column;
+    }
+    .modal-image-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .modal-image-label {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .modal-img-before,
+    .modal-img-after {
+      width: 100%;
+      height: 80vh;
       object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     }
     .modal-caption {
       color: var(--primary);
@@ -349,24 +435,7 @@
       font-weight: bold;
       text-shadow: 0 0 8px rgba(255,0,0,0.3);
     }
-    .modal-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 2.2rem;
-      color: var(--primary);
-      background: rgba(255,255,255,0.7);
-      border: none;
-      border-radius: 50%;
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      z-index: 10;
-      transition: background 0.15s;
-    }
-    .modal-arrow:hover { background: var(--accent); color: #fff; }
-    .modal-arrow.left { left: 8px; }
-    .modal-arrow.right { right: 8px; }
+
     @media (max-width: 900px) {
       .room-images-grid { 
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -400,7 +469,15 @@
     }
     @media (max-width: 600px) {
       .modal-content { padding: 4px; }
-      .modal-img { max-width: 98vw; max-height: 50vh; }
+      .modal-comparison-images {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .modal-img-before,
+      .modal-img-after {
+        height: 40vh;
+        width: 100%;
+      }
     }
     .room-title {
       font-size: 4rem;
@@ -439,13 +516,20 @@
     <section class="room-section" id="access-hallway">
       <div class="room-title">Access Hallway</div>
       <div class="room-images-grid">
-        <div class="image-item gallery-trigger" data-room="access-hallway" data-image="0">
-          <div class="image-label">Current State</div>
-          <img class="room-image" src="Images - before/Access Hallway - before.png" alt="Access Hallway Before" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="access-hallway" data-image="1">
-          <div class="image-label">Proposed Design</div>
-          <img class="room-image" src="Images - after/access hallway - after.png" alt="Access Hallway After" />
+        <div class="comparison-item gallery-trigger" data-room="access-hallway" data-comparison="0">
+          <div class="comparison-images">
+            <div class="comparison-image">
+              <div class="image-label">Current State</div>
+              <img class="room-image" src="Images - before/Access Hallway - before.png" alt="Access Hallway Before" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design</div>
+              <img class="room-image" src="Images - after/access hallway - after.png" alt="Access Hallway After" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Click to compare</span>
+          </div>
         </div>
       </div>
       <div class="main-changes">
@@ -460,13 +544,20 @@
     <section class="room-section" id="phone-booth">
       <div class="room-title">Phone Booths</div>
       <div class="room-images-grid">
-        <div class="image-item gallery-trigger" data-room="phone-booth" data-image="0">
-          <div class="image-label">Current State</div>
-          <img class="room-image" src="Images - before/phone booth - before.png" alt="Phone Booth Before" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="phone-booth" data-image="1">
-          <div class="image-label">Proposed Design</div>
-          <img class="room-image" src="Images - after/phone booth - after.png" alt="Phone Booth After" />
+        <div class="comparison-item gallery-trigger" data-room="phone-booth" data-comparison="0">
+          <div class="comparison-images">
+            <div class="comparison-image">
+              <div class="image-label">Current State</div>
+              <img class="room-image" src="Images - before/phone booth - before.png" alt="Phone Booth Before" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design</div>
+              <img class="room-image" src="Images - after/phone booth - after.png" alt="Phone Booth After" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Click to compare</span>
+          </div>
         </div>
       </div>
       <div class="main-changes">
@@ -481,13 +572,20 @@
     <section class="room-section" id="coffee-desk">
       <div class="room-title">Coffee Desk</div>
       <div class="room-images-grid">
-        <div class="image-item gallery-trigger" data-room="coffee-desk" data-image="0">
-          <div class="image-label">Current State</div>
-          <img class="room-image" src="Images - before/coffee desk - before.png" alt="Coffee Desk Before" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="coffee-desk" data-image="1">
-          <div class="image-label">Proposed Design</div>
-          <img class="room-image" src="Images - after/coffee desk - after.png" alt="Coffee Desk After" />
+        <div class="comparison-item gallery-trigger" data-room="coffee-desk" data-comparison="0">
+          <div class="comparison-images">
+            <div class="comparison-image">
+              <div class="image-label">Current State</div>
+              <img class="room-image" src="Images - before/coffee desk - before.png" alt="Coffee Desk Before" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design</div>
+              <img class="room-image" src="Images - after/coffee desk - after.png" alt="Coffee Desk After" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Click to compare</span>
+          </div>
         </div>
       </div>
       <div class="main-changes">
@@ -503,21 +601,35 @@
     <section class="room-section" id="staff-workroom">
       <div class="room-title">Staff Workroom</div>
       <div class="room-images-grid staff-workroom-grid">
-        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="0">
-          <div class="image-label">Current State - Back View</div>
-          <img class="room-image" src="Images - before/staff workroom - back view - before.png" alt="Staff Workroom Before - Back View" />
+        <div class="comparison-item gallery-trigger" data-room="staff-workroom" data-comparison="0">
+          <div class="comparison-images vertical">
+            <div class="comparison-image">
+              <div class="image-label">Current State - Back View</div>
+              <img class="room-image" src="Images - before/staff workroom - back view - before.png" alt="Staff Workroom Before - Back View" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design - Back View</div>
+              <img class="room-image" src="Images - after/staff workroom - back view - after.png" alt="Staff Workroom After - Back View" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Back View Comparison</span>
+          </div>
         </div>
-        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="1">
-          <div class="image-label">Current State - Front View</div>
-          <img class="room-image" src="Images - before/staff workroom - front view - before.png" alt="Staff Workroom Before - Front View" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="2">
-          <div class="image-label">Proposed Design - Back View</div>
-          <img class="room-image" src="Images - after/staff workroom - back view - after.png" alt="Staff Workroom After - Back View" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="3">
-          <div class="image-label">Proposed Design - Front View</div>
-          <img class="room-image" src="Images - after/staff workroom - front view - after.png" alt="Staff Workroom After - Front View" />
+        <div class="comparison-item gallery-trigger" data-room="staff-workroom" data-comparison="1">
+          <div class="comparison-images vertical">
+            <div class="comparison-image">
+              <div class="image-label">Current State - Front View</div>
+              <img class="room-image" src="Images - before/staff workroom - front view - before.png" alt="Staff Workroom Before - Front View" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design - Front View</div>
+              <img class="room-image" src="Images - after/staff workroom - front view - after.png" alt="Staff Workroom After - Front View" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Front View Comparison</span>
+          </div>
         </div>
       </div>
       <div class="main-changes">
@@ -535,13 +647,20 @@
     <section class="room-section" id="informal-meeting-room">
       <div class="room-title">Informal Meeting Room</div>
       <div class="room-images-grid">
-        <div class="image-item gallery-trigger" data-room="informal-meeting-room" data-image="0">
-          <div class="image-label">Current State - Entrance View</div>
-          <img class="room-image" src="Images - before/informal meeting room - entrance view - before.png" alt="Informal Meeting Room Before - Entrance View" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="informal-meeting-room" data-image="1">
-          <div class="image-label">Proposed Design - Entrance View</div>
-          <img class="room-image" src="Images - after/informal meeting room - entrance view - after.png" alt="Informal Meeting Room After - Entrance View" />
+        <div class="comparison-item gallery-trigger" data-room="informal-meeting-room" data-comparison="0">
+          <div class="comparison-images">
+            <div class="comparison-image">
+              <div class="image-label">Current State - Entrance View</div>
+              <img class="room-image" src="Images - before/informal meeting room - entrance view - before.png" alt="Informal Meeting Room Before - Entrance View" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design - Entrance View</div>
+              <img class="room-image" src="Images - after/informal meeting room - entrance view - after.png" alt="Informal Meeting Room After - Entrance View" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Click to compare</span>
+          </div>
         </div>
       </div>
       <div class="main-changes">
@@ -557,29 +676,50 @@
     <section class="room-section" id="kitchen">
       <div class="room-title">Kitchen</div>
       <div class="room-images-grid">
-        <div class="image-item gallery-trigger" data-room="kitchen" data-image="0">
-          <div class="image-label">Current State - Entrance View</div>
-          <img class="room-image" src="Images - before/kitchen - entrance view - before.png" alt="Kitchen Before - Entrance View" />
+        <div class="comparison-item gallery-trigger" data-room="kitchen" data-comparison="0">
+          <div class="comparison-images vertical">
+            <div class="comparison-image">
+              <div class="image-label">Current State - Entrance View</div>
+              <img class="room-image" src="Images - before/kitchen - entrance view - before.png" alt="Kitchen Before - Entrance View" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design - Entrance View</div>
+              <img class="room-image" src="Images - after/kitchen - entrance view - after.png" alt="Kitchen After - Entrance View" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Entrance View Comparison</span>
+          </div>
         </div>
-        <div class="image-item gallery-trigger" data-room="kitchen" data-image="1">
-          <div class="image-label">Current State - Back View</div>
-          <img class="room-image" src="Images - before/kitchen - back view - before.png" alt="Kitchen Before - Back View" />
+        <div class="comparison-item gallery-trigger" data-room="kitchen" data-comparison="1">
+          <div class="comparison-images vertical">
+            <div class="comparison-image">
+              <div class="image-label">Current State - Back View</div>
+              <img class="room-image" src="Images - before/kitchen - back view - before.png" alt="Kitchen Before - Back View" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design - Back View</div>
+              <img class="room-image" src="Images - after/kitchen - back view - after.png" alt="Kitchen After - Back View" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Back View Comparison</span>
+          </div>
         </div>
-        <div class="image-item gallery-trigger" data-room="kitchen" data-image="2">
-          <div class="image-label">Current State - Side View</div>
-          <img class="room-image" src="Images - before/kitchen - side view - before.png" alt="Kitchen Before - Side View" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="kitchen" data-image="3">
-          <div class="image-label">Proposed Design - Entrance View</div>
-          <img class="room-image" src="Images - after/kitchen - entrance view - after.png" alt="Kitchen After - Entrance View" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="kitchen" data-image="4">
-          <div class="image-label">Proposed Design - Back View</div>
-          <img class="room-image" src="Images - after/kitchen - back view - after.png" alt="Kitchen After - Back View" />
-        </div>
-        <div class="image-item gallery-trigger" data-room="kitchen" data-image="5">
-          <div class="image-label">Proposed Design - Side View</div>
-          <img class="room-image" src="Images - after/kitchen - side view - after.png" alt="Kitchen After - Side View" />
+        <div class="comparison-item gallery-trigger" data-room="kitchen" data-comparison="2">
+          <div class="comparison-images vertical">
+            <div class="comparison-image">
+              <div class="image-label">Current State - Side View</div>
+              <img class="room-image" src="Images - before/kitchen - side view - before.png" alt="Kitchen Before - Side View" />
+            </div>
+            <div class="comparison-image">
+              <div class="image-label">Proposed Design - Side View</div>
+              <img class="room-image" src="Images - after/kitchen - side view - after.png" alt="Kitchen After - Side View" />
+            </div>
+          </div>
+          <div class="comparison-overlay">
+            <span>Side View Comparison</span>
+          </div>
         </div>
       </div>
       <div class="main-changes">
@@ -627,86 +767,120 @@
   <div id="modal-gallery" class="modal" tabindex="-1">
     <div class="modal-content">
       <button class="modal-close" aria-label="Close">&times;</button>
-      <button class="modal-arrow left" aria-label="Previous" style="display:none;">&#8592;</button>
-      <img class="modal-img" src="" alt="Gallery image" style="display:none;"/>
-      <div class="modal-caption"></div>
-      <button class="modal-arrow right" aria-label="Next" style="display:none;">&#8594;</button>
+      <div class="modal-comparison">
+        <div class="modal-comparison-images">
+          <div class="modal-image-container">
+            <div class="modal-image-label">Current State</div>
+            <img class="modal-img-before" src="" alt="Before" />
+          </div>
+          <div class="modal-image-container">
+            <div class="modal-image-label">Proposed Design</div>
+            <img class="modal-img-after" src="" alt="After" />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <script>
-    // Image data for each room - all images in sequence
-    const galleryData = {
-      'access-hallway': [
-        'Images - before/Access Hallway - before.png',
-        'Images - after/access hallway - after.png'
-      ],
-      'phone-booth': [
-        'Images - before/phone booth - before.png',
-        'Images - after/phone booth - after.png'
-      ],
-      'coffee-desk': [
-        'Images - before/coffee desk - before.png',
-        'Images - after/coffee desk - after.png'
-      ],
-      'staff-workroom': [
-        'Images - before/staff workroom - back view - before.png',
-        'Images - before/staff workroom - front view - before.png',
-        'Images - after/staff workroom - back view - after.png',
-        'Images - after/staff workroom - front view - after.png'
-      ],
-      'informal-meeting-room': [
-        'Images - before/informal meeting room - entrance view - before.png',
-        'Images - after/informal meeting room - entrance view - after.png'
-      ],
-      'kitchen': [
-        'Images - before/kitchen - entrance view - before.png',
-        'Images - before/kitchen - back view - before.png',
-        'Images - before/kitchen - side view - before.png',
-        'Images - after/kitchen - entrance view - after.png',
-        'Images - after/kitchen - back view - after.png',
-        'Images - after/kitchen - side view - after.png'
-      ]
+    // Comparison data for each room
+    const comparisonData = {
+      'access-hallway': {
+        0: {
+          before: 'Images - before/Access Hallway - before.png',
+          after: 'Images - after/access hallway - after.png',
+          layout: 'horizontal'
+        }
+      },
+      'phone-booth': {
+        0: {
+          before: 'Images - before/phone booth - before.png',
+          after: 'Images - after/phone booth - after.png',
+          layout: 'horizontal'
+        }
+      },
+      'coffee-desk': {
+        0: {
+          before: 'Images - before/coffee desk - before.png',
+          after: 'Images - after/coffee desk - after.png',
+          layout: 'horizontal'
+        }
+      },
+      'staff-workroom': {
+        0: {
+          before: 'Images - before/staff workroom - back view - before.png',
+          after: 'Images - after/staff workroom - back view - after.png',
+          layout: 'horizontal'
+        },
+        1: {
+          before: 'Images - before/staff workroom - front view - before.png',
+          after: 'Images - after/staff workroom - front view - after.png',
+          layout: 'horizontal'
+        }
+      },
+      'informal-meeting-room': {
+        0: {
+          before: 'Images - before/informal meeting room - entrance view - before.png',
+          after: 'Images - after/informal meeting room - entrance view - after.png',
+          layout: 'horizontal'
+        }
+      },
+      'kitchen': {
+        0: {
+          before: 'Images - before/kitchen - entrance view - before.png',
+          after: 'Images - after/kitchen - entrance view - after.png',
+          layout: 'horizontal'
+        },
+        1: {
+          before: 'Images - before/kitchen - back view - before.png',
+          after: 'Images - after/kitchen - back view - after.png',
+          layout: 'horizontal'
+        },
+        2: {
+          before: 'Images - before/kitchen - side view - before.png',
+          after: 'Images - after/kitchen - side view - after.png',
+          layout: 'horizontal'
+        }
+      }
     };
 
     // Modal logic
     const modal = document.getElementById('modal-gallery');
-    const modalImg = modal.querySelector('.modal-img');
-    const modalCaption = modal.querySelector('.modal-caption');
+    const modalComparison = modal.querySelector('.modal-comparison-images');
+    const modalImgBefore = modal.querySelector('.modal-img-before');
+    const modalImgAfter = modal.querySelector('.modal-img-after');
     const closeBtn = modal.querySelector('.modal-close');
-    const leftBtn = modal.querySelector('.modal-arrow.left');
-    const rightBtn = modal.querySelector('.modal-arrow.right');
-    let currentImages = [];
-    let currentIndex = 0;
 
-    function openGallery(room, imageIndex) {
-      currentImages = galleryData[room] || [];
-      currentIndex = parseInt(imageIndex);
-      if (currentImages.length === 0) return;
-      showImage();
+    function openComparison(room, comparisonIndex) {
+      const comparison = comparisonData[room]?.[comparisonIndex];
+      if (!comparison) return;
+      
+      modalImgBefore.src = comparison.before;
+      modalImgAfter.src = comparison.after;
+      
+      // Set layout based on comparison type
+      if (comparison.layout === 'vertical') {
+        modalComparison.classList.add('vertical');
+      } else {
+        modalComparison.classList.remove('vertical');
+      }
+      
       modal.classList.add('active');
       modal.focus();
     }
-    function showImage() {
-      modalImg.src = currentImages[currentIndex];
-      modalImg.style.display = 'block';
-      modalCaption.textContent = `${currentIndex+1} / ${currentImages.length}`;
-      leftBtn.style.display = currentIndex > 0 ? 'flex' : 'none';
-      rightBtn.style.display = currentIndex < currentImages.length-1 ? 'flex' : 'none';
-    }
+
     document.querySelectorAll('.gallery-trigger').forEach(el => {
       el.addEventListener('click', function() {
-        openGallery(this.dataset.room, this.dataset.image);
+        openComparison(this.dataset.room, this.dataset.comparison);
       });
     });
-    closeBtn.onclick = () => { modal.classList.remove('active'); modalImg.style.display = 'none'; };
-    leftBtn.onclick = () => { if (currentIndex > 0) { currentIndex--; showImage(); } };
-    rightBtn.onclick = () => { if (currentIndex < currentImages.length-1) { currentIndex++; showImage(); } };
+    
+    closeBtn.onclick = () => { modal.classList.remove('active'); };
+    
     window.addEventListener('keydown', e => {
       if (!modal.classList.contains('active')) return;
       if (e.key === 'Escape') closeBtn.onclick();
-      if (e.key === 'ArrowLeft') leftBtn.onclick();
-      if (e.key === 'ArrowRight') rightBtn.onclick();
     });
+    
     modal.addEventListener('click', function(e) {
       if (e.target === modal) closeBtn.onclick();
     });
