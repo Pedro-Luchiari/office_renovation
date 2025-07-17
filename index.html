@@ -128,61 +128,67 @@
       display: block;
       width: 100%;
     }
-    .room-compare {
-      display: flex;
-      gap: 32px;
+    .room-images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
       margin-bottom: 24px;
-      flex-wrap: wrap;
     }
-    .compare-block {
-      flex: 1 1 320px;
+    .image-item {
       background: #f4f6fa;
       border-radius: var(--radius);
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       border: 1px solid var(--border);
-      position: relative;
-      margin-bottom: 8px;
-      max-width: 420px;
       overflow: hidden;
       cursor: pointer;
-      padding: 0;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
     }
-    .compare-label {
+    .image-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(10,34,80,0.12);
+    }
+    .image-label {
       position: absolute;
       top: 12px;
       left: 16px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--muted);
       font-weight: 600;
       z-index: 2;
-      background: #f4f6fa;
+      background: rgba(244, 246, 250, 0.95);
       border-radius: 8px;
-      padding: 2px 10px;
+      padding: 4px 12px;
+      backdrop-filter: blur(4px);
     }
-    .compare-img {
+    .room-image {
       width: 100%;
-      height: 220px;
+      height: 240px;
       object-fit: cover;
-      border-radius: 0 0 16px 16px;
       display: block;
+      transition: transform 0.2s;
     }
-    .img-desc {
-      font-size: 1rem;
-      color: var(--muted);
-      text-align: center;
-      margin-top: 0;
-      background: #f4f6fa;
-      width: 100%;
-      padding: 8px 0 12px 0;
-      border-radius: 0 0 16px 16px;
-      z-index: 2;
-      position: absolute;
-      bottom: 0;
-      left: 0;
+    .image-item:hover .room-image {
+      transform: scale(1.02);
+    }
+    .staff-workroom-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, auto);
+    }
+    .staff-workroom-grid .image-item:nth-child(1) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .staff-workroom-grid .image-item:nth-child(2) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .staff-workroom-grid .image-item:nth-child(3) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .staff-workroom-grid .image-item:nth-child(4) {
+      grid-column: 2;
+      grid-row: 2;
     }
     .main-changes {
       background: var(--card-bg);
@@ -334,12 +340,14 @@
     .modal-close {
       position: absolute;
       top: 12px; right: 18px;
-      font-size: 2rem;
-      color: var(--muted);
+      font-size: 3rem;
+      color: #ff0000;
       background: none;
       border: none;
       cursor: pointer;
       z-index: 10;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(255,0,0,0.3);
     }
     .modal-arrow {
       position: absolute;
@@ -360,8 +368,13 @@
     .modal-arrow.left { left: 8px; }
     .modal-arrow.right { right: 8px; }
     @media (max-width: 900px) {
-      .room-compare { flex-direction: column; gap: 16px; }
-      .compare-block { max-width: 100%; }
+      .room-images-grid { 
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .staff-workroom-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .investment-section { padding: 24px 4vw; }
     }
     @media (max-width: 600px) {
@@ -372,6 +385,14 @@
       .room-title { font-size: 1.3rem; }
       .investment-title { font-size: 1.3rem; }
       .investment-total { font-size: 1.5rem; }
+      .room-images-grid { 
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .staff-workroom-grid {
+        grid-template-columns: 1fr;
+      }
+      .room-image { height: 200px; }
     }
     @media (max-width: 600px) {
       .modal-content { padding: 4px; }
@@ -413,16 +434,14 @@
     <!-- Room Sections -->
     <section class="room-section" id="access-hallway">
       <div class="room-title">Access Hallway</div>
-      <div class="room-compare">
-        <div class="compare-block gallery-trigger" data-room="access-hallway" data-type="before">
-          <div class="compare-label">Current State</div>
-          <img class="compare-img" src="Images - before/Access Hallway - before.png" alt="Access Hallway Before" />
-          <div class="img-desc">Click to view images</div>
+      <div class="room-images-grid">
+        <div class="image-item gallery-trigger" data-room="access-hallway" data-image="0">
+          <div class="image-label">Current State</div>
+          <img class="room-image" src="Images - before/Access Hallway - before.png" alt="Access Hallway Before" />
         </div>
-        <div class="compare-block gallery-trigger" data-room="access-hallway" data-type="after">
-          <div class="compare-label">Proposed Design</div>
-          <img class="compare-img" src="Images - after/access hallway - after.png" alt="Access Hallway After" />
-          <div class="img-desc">Click to view images</div>
+        <div class="image-item gallery-trigger" data-room="access-hallway" data-image="1">
+          <div class="image-label">Proposed Design</div>
+          <img class="room-image" src="Images - after/access hallway - after.png" alt="Access Hallway After" />
         </div>
       </div>
       <div class="main-changes">
@@ -436,16 +455,14 @@
 
     <section class="room-section" id="phone-booth">
       <div class="room-title">Phone Booths</div>
-      <div class="room-compare">
-        <div class="compare-block gallery-trigger" data-room="phone-booth" data-type="before">
-          <div class="compare-label">Current State</div>
-          <img class="compare-img" src="Images - before/phone booth - before.png" alt="Phone Booth Before" />
-          <div class="img-desc">Click to view images</div>
+      <div class="room-images-grid">
+        <div class="image-item gallery-trigger" data-room="phone-booth" data-image="0">
+          <div class="image-label">Current State</div>
+          <img class="room-image" src="Images - before/phone booth - before.png" alt="Phone Booth Before" />
         </div>
-        <div class="compare-block gallery-trigger" data-room="phone-booth" data-type="after">
-          <div class="compare-label">Proposed Design</div>
-          <img class="compare-img" src="Images - after/phone booth - after.png" alt="Phone Booth After" />
-          <div class="img-desc">Click to view images</div>
+        <div class="image-item gallery-trigger" data-room="phone-booth" data-image="1">
+          <div class="image-label">Proposed Design</div>
+          <img class="room-image" src="Images - after/phone booth - after.png" alt="Phone Booth After" />
         </div>
       </div>
       <div class="main-changes">
@@ -459,16 +476,14 @@
 
     <section class="room-section" id="coffee-desk">
       <div class="room-title">Coffee Desk</div>
-      <div class="room-compare">
-        <div class="compare-block gallery-trigger" data-room="coffee-desk" data-type="before">
-          <div class="compare-label">Current State</div>
-          <img class="compare-img" src="Images - before/coffee desk - before.png" alt="Coffee Desk Before" />
-          <div class="img-desc">Click to view images</div>
+      <div class="room-images-grid">
+        <div class="image-item gallery-trigger" data-room="coffee-desk" data-image="0">
+          <div class="image-label">Current State</div>
+          <img class="room-image" src="Images - before/coffee desk - before.png" alt="Coffee Desk Before" />
         </div>
-        <div class="compare-block gallery-trigger" data-room="coffee-desk" data-type="after">
-          <div class="compare-label">Proposed Design</div>
-          <img class="compare-img" src="Images - after/coffee desk - after.png" alt="Coffee Desk After" />
-          <div class="img-desc">Click to view images</div>
+        <div class="image-item gallery-trigger" data-room="coffee-desk" data-image="1">
+          <div class="image-label">Proposed Design</div>
+          <img class="room-image" src="Images - after/coffee desk - after.png" alt="Coffee Desk After" />
         </div>
       </div>
       <div class="main-changes">
@@ -483,16 +498,22 @@
 
     <section class="room-section" id="staff-workroom">
       <div class="room-title">Staff Workroom</div>
-      <div class="room-compare">
-        <div class="compare-block gallery-trigger" data-room="staff-workroom" data-type="before">
-          <div class="compare-label">Current State</div>
-          <img class="compare-img" src="Images - before/staff workroom - back view - before.png" alt="Staff Workroom Before" />
-          <div class="img-desc">Click to view images</div>
+      <div class="room-images-grid staff-workroom-grid">
+        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="0">
+          <div class="image-label">Current State - Back View</div>
+          <img class="room-image" src="Images - before/staff workroom - back view - before.png" alt="Staff Workroom Before - Back View" />
         </div>
-        <div class="compare-block gallery-trigger" data-room="staff-workroom" data-type="after">
-          <div class="compare-label">Proposed Design</div>
-          <img class="compare-img" src="Images - after/staff workroom - back view - after.png" alt="Staff Workroom After" />
-          <div class="img-desc">Click to view images</div>
+        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="1">
+          <div class="image-label">Current State - Front View</div>
+          <img class="room-image" src="Images - before/staff workroom - front view - before.png" alt="Staff Workroom Before - Front View" />
+        </div>
+        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="2">
+          <div class="image-label">Proposed Design - Back View</div>
+          <img class="room-image" src="Images - after/staff workroom - back view - after.png" alt="Staff Workroom After - Back View" />
+        </div>
+        <div class="image-item gallery-trigger" data-room="staff-workroom" data-image="3">
+          <div class="image-label">Proposed Design - Front View</div>
+          <img class="room-image" src="Images - after/staff workroom - front view - after.png" alt="Staff Workroom After - Front View" />
         </div>
       </div>
       <div class="main-changes">
@@ -509,16 +530,14 @@
 
     <section class="room-section" id="informal-meeting-room">
       <div class="room-title">Informal Meeting Room</div>
-      <div class="room-compare">
-        <div class="compare-block gallery-trigger" data-room="informal-meeting-room" data-type="before">
-          <div class="compare-label">Current State</div>
-          <img class="compare-img" src="Images - before/informal meeting room - entrance view - before.png" alt="Informal Meeting Room Before" />
-          <div class="img-desc">Click to view images</div>
+      <div class="room-images-grid">
+        <div class="image-item gallery-trigger" data-room="informal-meeting-room" data-image="0">
+          <div class="image-label">Current State - Entrance View</div>
+          <img class="room-image" src="Images - before/informal meeting room - entrance view - before.png" alt="Informal Meeting Room Before - Entrance View" />
         </div>
-        <div class="compare-block gallery-trigger" data-room="informal-meeting-room" data-type="after">
-          <div class="compare-label">Proposed Design</div>
-          <img class="compare-img" src="Images - after/informal meeting room - entrance view - after.png" alt="Informal Meeting Room After" />
-          <div class="img-desc">Click to view images</div>
+        <div class="image-item gallery-trigger" data-room="informal-meeting-room" data-image="1">
+          <div class="image-label">Proposed Design - Entrance View</div>
+          <img class="room-image" src="Images - after/informal meeting room - entrance view - after.png" alt="Informal Meeting Room After - Entrance View" />
         </div>
       </div>
       <div class="main-changes">
@@ -533,16 +552,30 @@
 
     <section class="room-section" id="kitchen">
       <div class="room-title">Kitchen</div>
-      <div class="room-compare">
-        <div class="compare-block gallery-trigger" data-room="kitchen" data-type="before">
-          <div class="compare-label">Current State</div>
-          <img class="compare-img" src="Images - before/kitchen - entrance view - before.png" alt="Kitchen Before" />
-          <div class="img-desc">Click to view images</div>
+      <div class="room-images-grid">
+        <div class="image-item gallery-trigger" data-room="kitchen" data-image="0">
+          <div class="image-label">Current State - Entrance View</div>
+          <img class="room-image" src="Images - before/kitchen - entrance view - before.png" alt="Kitchen Before - Entrance View" />
         </div>
-        <div class="compare-block gallery-trigger" data-room="kitchen" data-type="after">
-          <div class="compare-label">Proposed Design</div>
-          <img class="compare-img" src="Images - after/kitchen - entrance view - after.png" alt="Kitchen After" />
-          <div class="img-desc">Click to view images</div>
+        <div class="image-item gallery-trigger" data-room="kitchen" data-image="1">
+          <div class="image-label">Current State - Back View</div>
+          <img class="room-image" src="Images - before/kitchen - back view - before.png" alt="Kitchen Before - Back View" />
+        </div>
+        <div class="image-item gallery-trigger" data-room="kitchen" data-image="2">
+          <div class="image-label">Current State - Side View</div>
+          <img class="room-image" src="Images - before/kitchen - side view - before.png" alt="Kitchen Before - Side View" />
+        </div>
+        <div class="image-item gallery-trigger" data-room="kitchen" data-image="3">
+          <div class="image-label">Proposed Design - Entrance View</div>
+          <img class="room-image" src="Images - after/kitchen - entrance view - after.png" alt="Kitchen After - Entrance View" />
+        </div>
+        <div class="image-item gallery-trigger" data-room="kitchen" data-image="4">
+          <div class="image-label">Proposed Design - Back View</div>
+          <img class="room-image" src="Images - after/kitchen - back view - after.png" alt="Kitchen After - Back View" />
+        </div>
+        <div class="image-item gallery-trigger" data-room="kitchen" data-image="5">
+          <div class="image-label">Proposed Design - Side View</div>
+          <img class="room-image" src="Images - after/kitchen - side view - after.png" alt="Kitchen After - Side View" />
         </div>
       </div>
       <div class="main-changes">
@@ -597,62 +630,38 @@
     </div>
   </div>
   <script>
-    // Image data for each room and type
+    // Image data for each room - all images in sequence
     const galleryData = {
-      'access-hallway': {
-        before: [
-          'Images - before/Access Hallway - before.png'
-        ],
-        after: [
-          'Images - after/access hallway - after.png'
-        ]
-      },
-      'phone-booth': {
-        before: [
-          'Images - before/phone booth - before.png'
-        ],
-        after: [
-          'Images - after/phone booth - after.png'
-        ]
-      },
-      'coffee-desk': {
-        before: [
-          'Images - before/coffee desk - before.png'
-        ],
-        after: [
-          'Images - after/coffee desk - after.png'
-        ]
-      },
-      'staff-workroom': {
-        before: [
-          'Images - before/staff workroom - back view - before.png',
-          'Images - before/staff workroom - front view - before.png'
-        ],
-        after: [
-          'Images - after/staff workroom - back view - after.png',
-          'Images - after/staff workroom - front view - after.png'
-        ]
-      },
-      'informal-meeting-room': {
-        before: [
-          'Images - before/informal meeting room - entrance view - before.png'
-        ],
-        after: [
-          'Images - after/informal meeting room - entrance view - after.png'
-        ]
-      },
-      'kitchen': {
-        before: [
-          'Images - before/kitchen - entrance view - before.png',
-          'Images - before/kitchen - back view - before.png',
-          'Images - before/kitchen - side view - before.png'
-        ],
-        after: [
-          'Images - after/kitchen - entrance view - after.png',
-          'Images - after/kitchen - back view - after.png',
-          'Images - after/kitchen - side view - after.png'
-        ]
-      }
+      'access-hallway': [
+        'Images - before/Access Hallway - before.png',
+        'Images - after/access hallway - after.png'
+      ],
+      'phone-booth': [
+        'Images - before/phone booth - before.png',
+        'Images - after/phone booth - after.png'
+      ],
+      'coffee-desk': [
+        'Images - before/coffee desk - before.png',
+        'Images - after/coffee desk - after.png'
+      ],
+      'staff-workroom': [
+        'Images - before/staff workroom - back view - before.png',
+        'Images - before/staff workroom - front view - before.png',
+        'Images - after/staff workroom - back view - after.png',
+        'Images - after/staff workroom - front view - after.png'
+      ],
+      'informal-meeting-room': [
+        'Images - before/informal meeting room - entrance view - before.png',
+        'Images - after/informal meeting room - entrance view - after.png'
+      ],
+      'kitchen': [
+        'Images - before/kitchen - entrance view - before.png',
+        'Images - before/kitchen - back view - before.png',
+        'Images - before/kitchen - side view - before.png',
+        'Images - after/kitchen - entrance view - after.png',
+        'Images - after/kitchen - back view - after.png',
+        'Images - after/kitchen - side view - after.png'
+      ]
     };
 
     // Modal logic
@@ -665,9 +674,9 @@
     let currentImages = [];
     let currentIndex = 0;
 
-    function openGallery(room, type) {
-      currentImages = galleryData[room][type] || [];
-      currentIndex = 0;
+    function openGallery(room, imageIndex) {
+      currentImages = galleryData[room] || [];
+      currentIndex = parseInt(imageIndex);
       if (currentImages.length === 0) return;
       showImage();
       modal.classList.add('active');
@@ -682,7 +691,7 @@
     }
     document.querySelectorAll('.gallery-trigger').forEach(el => {
       el.addEventListener('click', function() {
-        openGallery(this.dataset.room, this.dataset.type);
+        openGallery(this.dataset.room, this.dataset.image);
       });
     });
     closeBtn.onclick = () => { modal.classList.remove('active'); modalImg.style.display = 'none'; };
